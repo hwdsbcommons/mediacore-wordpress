@@ -25,6 +25,18 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+if (isset($allowedposttags)) {
+	$allowedposttags['iframe'] = array(
+		'src' => array(),
+		'width' => array(),
+		'height' => array(),
+		'frameborder' => array(),
+		'allowfullscreen' => array(),
+		'mozallowfullscreen' => array(),
+		'webkitallowfullscreen' => array()
+	);
+}
+
 function mcore_embed_js($plugin_array) {
    $plugin_array['mcore'] = plugins_url().'/mediacore/mcore_embed_button.js';
    return $plugin_array;
