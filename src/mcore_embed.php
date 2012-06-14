@@ -25,18 +25,6 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-if (isset($allowedposttags)) {
-	$allowedposttags['iframe'] = array(
-		'src' => array(),
-		'width' => array(),
-		'height' => array(),
-		'frameborder' => array(),
-		'allowfullscreen' => array(),
-		'mozallowfullscreen' => array(),
-		'webkitallowfullscreen' => array()
-	);
-}
-
 function mcore_embed_js($plugin_array) {
    $plugin_array['mcore'] = plugins_url().'/mediacore/mcore_embed_button.js';
    return $plugin_array;
@@ -48,10 +36,35 @@ function mcore_embed_button($buttons) {
     return $buttons;
 }
 
+function mcore_embed_tinymce_init($options) {
+	// Without this, the allowfullscreen attributes will be stripped by TinyMCE,
+	// breaking HTML5 fullscreen in our player.
+	$iframeRule = 'iframe[src|width|height|frameborder|allowfullscreen|mozallowfullscreen|webkitallowfullscreen]';
+	if (isset($options['extended_valid_elements'])) {
+		$options['extended_valid_elements'] .= ',' . $iframeRule;
+	} else {
+		$options['extended_valid_elements'] = $iframeRule;
+	}
+	return $options;
+}
+
 function mcore_embed_init() {
 	if (is_admin()) {
+		// Ensure that the user is allowed to post the iframe tag in a page/blog post.
+		// Most admins don't appear to need this, but better to be explicit.
+		$allowedposttags['iframe'] = array(
+			'src' => array(),
+			'width' => array(),
+			'height' => array(),
+			'frameborder' => array(),
+			'allowfullscreen' => array(),
+			'mozallowfullscreen' => array(),
+			'webkitallowfullscreen' => array()
+		);
+
 		add_filter('mce_buttons', 'mcore_embed_button', 0);
 		add_filter('mce_external_plugins', 'mcore_embed_js');
+		add_filter('tiny_mce_before_init', 'mcore_embed_tinymce_init');
 
 		wp_enqueue_script('jquery');
     	wp_deregister_script( 'timeago' );
