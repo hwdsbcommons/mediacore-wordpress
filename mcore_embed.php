@@ -138,5 +138,33 @@ function mcore_embed_init_options(){
 add_action('admin_init', 'mcore_embed_init');
 add_action('admin_head', 'mcore_embed_head_init');
 add_action('admin_menu', 'mcore_embed_init_options');
-	
+
+
+/* 
+	Implement the shortcode API; takes the shortcode attributes and turns them
+	into the correct iframe embed code. i.e.:
+
+	[mediacore link="http://demo.mediacore.tv/media/bctia-demoday-2012" width="560px" height="315px"]
+
+*/
+function mcore_shortcode_handler($atts) {
+        extract( shortcode_atts( array(
+                'link' => 'http://demo.mediacore.tv/media/introducing-the-new-mediacore',
+                'width' => '560px',
+                'height' => '315px'
+        ), $atts ) );
+
+        $embedcode = "<iframe src=\"" . $link . "/embed_player?iframe=True\"";
+        $embedcode .= " width=\"" . $width . "\"";
+        $embedcode .= " height=\"" . $height . "\"";
+        $embedcode .= " mozallowfullscreen=\"mozallowfullscreen\"";
+        $embedcode .= " webkitallowfullscreen=\"webkitallowfullscreen\"";
+        $embedcode .= " allowfullscreen=\"allowfullscreen\"";
+        $embedcode .= " scrolling=\"no\"";
+        $embedcode .= " frameborder=\"0\"";
+        $embedcode .= "></iframe>";
+        return $embedcode;
+}
+add_shortcode( 'mediacore', 'mcore_shortcode_handler' );
+
 ?>

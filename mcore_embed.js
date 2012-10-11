@@ -279,10 +279,18 @@ var mcore = {};
 
 	function mediaClicked(row){
 		embed = mcore.mediaRows[row.id].media.embed;
-		tinyMCE.get()[0].execCommand("mceInsertContent",false,embed);
+		height = embed.split('height="');
+		height = height[1].split('"');
+		width = embed.split('width="');
+		width = width[1].split('"');
+		embed = '[mediacore link="' + mcore.mediaRows[row.id].media.url + '"';
+		embed += ' height="' + height[0] + '"';
+		embed += ' width="' + width[0] + '"]';
+		tinyMCE.execCommand('mceInsertContent',false,embed);
 		row = $(row);
 		row.addClass('clicked');
 		row.children('div').animate({opacity : 0.5}, {duration: 75, queue: false});
+		mcore.closeMcoreEmbed();
 	}
 
 	function getMedia() {
