@@ -3,7 +3,7 @@
 	Plugin Name: MediaCore
 	Plugin URI: http://mediacore.com
 	Description: MediaCore's plugin allows you to embed any videos publicly accessible on your MediaCore site.
-	Version: 1.0
+	Version: 1.1
 	Author: MediaCore
 	Author URI: http://mediacore.com
 	License: GPL2
