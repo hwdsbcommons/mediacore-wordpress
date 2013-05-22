@@ -1,0 +1,9 @@
+#mcore-image-buttons {
+	position: absolute;
+	width: 72px;
+	height: 42px;
+	z-index: 160000;
+}
+#mcore-image-buttons:hover {
+	cursor: pointer;
+}
