@@ -24,10 +24,10 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 .icon32#mcore-logo {
-	background: url('images/mcore-logo.png') no-repeat center;
+	background: url('../images/mcore-logo.png') no-repeat center;
 }
 
-.mcore-url {
+#mcore-settings .mcore-url {
 	display:inline-block;
 	font-weight: 500;
 	color: #3f576f;
@@ -42,6 +42,6 @@
 	margin-left: 20px;
 }
 
-.new-mcore-url {
-	margin-left: 10px;
+#mcore-settings .mcore-url {
+	margin-left: 0;
 }
