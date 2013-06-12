@@ -14,8 +14,6 @@ Embed media items from your MediaCore site into posts and pages
 
 == Description ==
 
-This is a beta release. Use at your discretion.
-
 MediaCore's plugin allows you to embed any videos publicly accessible on your
 MediaCore site.
 
@@ -36,7 +34,7 @@ for more information about how the plugin works.
 == Changelog ==
 
 = 2.0 =
-* Uses the MediaCore Chooser (library, upload)
+* Uses our new MediaCore Chooser (view library, upload media)
 * Requires that your MediaCore account is configured to use the Chooser
 
 = 1.0 =
