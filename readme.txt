@@ -6,11 +6,11 @@ Tags: video, videos, audio, podcasting, progressive streaming, embed, mediacore,
       admin, administration, api
 Requires at least: 3.0
 Tested up to: 3.5.1
-Stable tag: 2.0
+Stable tag: 2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Embed videos, audio, documents and images into your WordPress posts and pages. 
+Embed videos, audio, documents and images into your WordPress posts and pages.
 Available for existing MediaCore users or sign up for a FREE account.
 
 == Description ==
@@ -46,7 +46,7 @@ and embed it into WordPress.
 
 = MediaCore Key Features =
 
-* **Global distribution** - MediaCore content is delivered by Akamai, a 
+* **Global distribution** - MediaCore content is delivered by Akamai, a
   <a href="http://support.mediacore.com/customer/portal/articles/108062-where-are-the-cdn-edge-locations" target="_blank">global network</a>
   of over 12,000 secure servers.
 * **Storage** -  We use redundant storage which means that all of your content is
@@ -88,6 +88,9 @@ interactive experience. Supported documents include: PDFs, Microsoft Word
  for instructions on how to install and use this plugin.
 
 == Changelog ==
+
+= 2.1 =
+* Update readme text. Update license text.
 
 = 2.0 =
 * Uses the new MediaCore Chooser (view, embed and upload media)

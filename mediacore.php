@@ -1,14 +1,5 @@
 <?php
 /**
- * Plugin Name: MediaCore
- * Plugin URI: http://mediacore.com
- * Description: MediaCore's plugin allows you to embed any videos publicly accessible on your MediaCore site.
- * Version: 2.0
- * Author: MediaCore
- * Author URI: http://mediacore.com
- * License: GPL2
- *
- *
  * Copyright 2012  MediaCore  (email: info@mediacore.com)
  *
  * This program is free software; you can redistribute it and/or modify
@@ -24,7 +15,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 
 function mcore_chooser_button($buttons) {
 	array_push($buttons, 'separator', 'mediacore');

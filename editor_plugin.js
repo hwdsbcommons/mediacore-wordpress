@@ -1,12 +1,4 @@
 /**
- * Plugin Name: MediaCore
- * Plugin URI: http://mediacore.com
- * Description: MediaCore's plugin allows you to embed any videos publicly accessible on your MediaCore site.
- * Version: 2.0
- * Author: MediaCore
- * Author URI: http://mediacore.com
- * License: GPL2
- *
  * This borrows ideas from the following excellent shortcodes plugin:
  * Plugin Name: Visual Shortcodes
  * Plugin URI: http://wordpress.org/extend/plugins/visual-shortcodes
