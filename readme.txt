@@ -1,54 +1,97 @@
-== MediaCore Chooser ==
+=== MediaCore Chooser ===
 Contributors: getmediacore
 Tags: video, videos, audio, podcasting, progressive streaming, embed, mediacore,
       embedding, vimeo, youtube, thumbnails, images, widget, widgets, plugin,
       plugins, free, cms, collections, code, editor, thumbnail, wordpress,
       admin, administration, api
-Required at least: 3.0
+Requires at least: 3.0
 Tested up to: 3.5.1
 Stable tag: 2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Embed media items from your MediaCore site into posts and pages
+Embed videos, audio, documents and images into your WordPress posts and pages. 
+Available for existing MediaCore users or sign up for a FREE account.
 
 == Description ==
 
-MediaCore's plugin allows you to embed any videos publicly accessible on your
-MediaCore site.
+= Media management made easy =
 
-[MediaCore](http://mediacore.com/) is an online video platform for managing,
-encoding and delivering video to mobile and desktop devices.
-MediaCore makes it easy for any organization to share video either publicly or
-privately and build an amazing user experience on both desktop and mobile
-browsers around their own content.
+Restrictions on file size, storage and file types within WordPress regularly
+present barriers to WordPress users who are keen to embed rich, high quality
+multimedia. The MediaCore plugin for WordPress makes it easy to enhance your
+posts with video, audio, documents and images directly from your MediaCore
+site.
 
-Who's using Mediacore? More and more MediaCore powered sites are popping up all
-over the world. You can learn more about some of these sites here on our
-[MediaCore showcase](http://mediacore.com/why-mediacore).
+= Harness the power of video learning =
 
-More information:
-Visit our [blog post](http://mediacore.com/blog/the-mediacore-wordpress-plugin/)
-for more information about how the plugin works.
+Video is a powerful and effective way to engage your audience whether they’re
+students or educators. It holds their attention, encourages peer to peer
+learning and reinforces learning.
+
+MediaCore excels at making it simple to take advantage of video to support
+teaching and learning anywhere, anytime. Our new plugin brings this simplicity
+directly into WordPress.
+
+= Key Features of the WordPress plugin =
+
+* **Browse**, **search** and **securely embed** media from your MediaCore library
+into WordPress in one-click.
+* **Upload** large video, audio, document or image files (up to 20 GB in size)
+into your MediaCore library from within WordPress.
+* Automatically **convert** uploaded media into formats supported on devices
+including mobile, tablets and desktops.
+* **Capture** content on your iPhone or iPad, upload it to your MediaCore library,
+and embed it into WordPress.
+
+= MediaCore Key Features =
+
+* **Global distribution** - MediaCore content is delivered by Akamai, a 
+  <a href="http://support.mediacore.com/customer/portal/articles/108062-where-are-the-cdn-edge-locations" target="_blank">global network</a>
+  of over 12,000 secure servers.
+* **Storage** -  We use redundant storage which means that all of your content is
+stored in more than one location to ensure that it is safe.
+* **Video Players** - We use HTML5 and Flash video players to get an exceptional
+playback experience on almost any browser or mobile device.
+* All files are securely shared on MediaCore’s reliable cloud infrastructure so
+content can be accessed anywhere, anytime.
+* **Resumable Uploads** - If your internet connection is lost, or your browser times
+out, then your upload will automatically resume from the point at which it was
+interrupted when your connection comes back online.
+ <a href="http://mediacore.com/blog/mediacore-introduces-resumable-media-uploads" target="_blank">More information</a>.
+* **Supported Media Types** - MediaCore supports
+ <a href="http://support.mediacore.com/customer/portal/articles/878174-full-list-of-video-input-formats" target="_blank">all popular file formats</a>
+ such as: .MOV, .M4V, .MP4, .AVI, .FLV, WebM, .MP3, MPEG, .GIF, .JPG.
+* **Document Viewing** - The document and image viewers provide a rich and
+interactive experience. Supported documents include: PDFs, Microsoft Word
+(doc/docx), and Microsoft PowerPoint (ppt/pptx).
+
+= Need a MediaCore account? =
+
+* If you don’t already have a MediaCore account
+ <a href="http://mediacore.com/free" target="_blank">sign up</a> for a free educator
+ account.
+
+= Useful Teaching with Video Resources =
+
+* <a href="http://mediacore.com/blog/10-great-sources-of-educational-video-to-support-digital-learning" target="_blank">10 great sources of educational video to support digital learning</a>
+* <a href="http://mediacore.com/blog/screencast-apps-and-tools" target="_blank">Apps and tools for creating better screencasts and presentation videos</a>
+* <a href="http://mediacore.com/blog/flipping-the-classroom-for-younger-students" target="_blank">Flipping the Classroom for Younger Students</a>
+* <a href="http://mediacore.com/blog/how-to-transform-your-powerpoint-and-keynote-presentations-into-video-learning-resources" target="_blank">How to transform your powerpoint and keynote presentations into video learning resources</a>
+* <a href="http://mediacore.com/blog/recording-better-video-with-your-iphone-or-ipad-sound" target="_blank">Recording better sound with your iPhone or iPad</a>
+* <a href="http://mediacore.com/blog/recording-better-video-with-your-iphone-or-ipad-stabilization" target="_blank">Recording better video with your iPhone or iPad</a>
+* <a href="http://mediacore.com/blog/moocs-make-professors-dust-off-the-cobwebs" target="_blank">MOOCs Make Professors dust of the Cobwebs</a>
+
+== Installation ==
+* Visit our
+ <a href="http://support.mediacore.com/customer/portal/articles/922513-installing-and-using-the-plugin-for-wordpress" target="_blank">WordPress support page</a>
+ for instructions on how to install and use this plugin.
 
 == Changelog ==
 
 = 2.0 =
-* Uses our new MediaCore Chooser (view library, upload media)
+* Uses the new MediaCore Chooser (view, embed and upload media)
 * Requires that your MediaCore account is configured to use the Chooser
 
 = 1.0 =
 * Allows user to embed public videos
-
-== Installation ==
-1. Unzip the MediaCore plugin in the wp-content/plugins directory of your
-Wordpress installation.
-2. Navigate to the plugins page of the Wordpress admin panel and ensure the
-MediaCore plugin is activated.
-3. Lastly, go to Settings > MediaCore and enter the link to your MediaCore
-site.  (ex. http://yoursite.mediacore.tv)
-
-You will now be able to embed videos by clicking the MediaCore button in the
-default Wordpress text editor (for example, on the new post page). This will
-show all media items on your site, all you have to do is click one to embed it
-in your post/page, etc.
