@@ -116,17 +116,16 @@
 
       ed.onBeforeSetContent.add(function(ed, o) {
         t._hideButtons();
-        if (!t.shortcodeRegex.test(o.content)){
-          return;
+        if (t.shortcodeRegex.test(o.content)){
+          o.content = t._replaceShortcodes(o.content);
         }
-        o.content = t._replaceShortcodes(o.content);
+        return;
       });
 
       ed.onPostProcess.add(function(ed, o) {
         t._hideButtons();
         if (o.get) {
           o.content = t._replaceImages(o.content);
-          ed.setContent(o.content);
         }
       });
     },
