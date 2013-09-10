@@ -5,8 +5,8 @@ Tags: video, videos, audio, podcasting, progressive streaming, embed, mediacore,
       plugins, free, cms, collections, code, editor, thumbnail, wordpress,
       admin, administration, api
 Requires at least: 3.0
-Tested up to: 3.5.1
-Stable tag: 2.1
+Tested up to: 3.6
+Stable tag: 2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,6 +88,9 @@ interactive experience. Supported documents include: PDFs, Microsoft Word
  for instructions on how to install and use this plugin.
 
 == Changelog ==
+
+= 2.2 =
+* Fix bug that forced the cursor position to the top on auto saves
 
 = 2.1 =
 * Update readme text. Update license text.
