@@ -55,7 +55,7 @@ add_filter('tiny_mce_version', 'mcore_chooser_refresh_mce');
 
 
 function mcore_chooser_init() {
-	if ((is_super_admin() || current_user_can('edit-posts') || current_user_can('edit-pages')) &&
+	if ((is_super_admin() || current_user_can('edit_posts') || current_user_can('edit_pages')) &&
 		get_user_option('rich_editing')) {
 
 			add_filter('mce_external_plugins', 'mcore_chooser_js');
