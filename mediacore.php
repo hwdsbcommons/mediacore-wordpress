@@ -3,7 +3,7 @@
  * Plugin Name: MediaCore
  * Plugin URI: http://mediacore.com
  * Description: MediaCore's plugin allows you to embed and upload videos from your wordpress site
- * Version: 2.3
+ * Version: 2.4
  * Author: Derek Harnanansingh derek@mediacore.com
  * License: GPL2
  *

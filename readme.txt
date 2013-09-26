@@ -6,7 +6,7 @@ Tags: video, videos, audio, podcasting, progressive streaming, embed, mediacore,
       admin, administration, api
 Requires at least: 3.0
 Tested up to: 3.6
-Stable tag: 2.3
+Stable tag: 2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,6 +88,9 @@ interactive experience. Supported documents include: PDFs, Microsoft Word
  for instructions on how to install and use this plugin.
 
 == Changelog ==
+
+= 2.4 =
+* Fix user capabilities
 
 = 2.3 =
 * Re-post correct images to tags/2.3
