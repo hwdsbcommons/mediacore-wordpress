@@ -4,9 +4,9 @@ Tags: video, videos, audio, podcasting, progressive streaming, embed, mediacore,
       embedding, vimeo, youtube, thumbnails, images, widget, widgets, plugin,
       plugins, free, cms, collections, code, editor, thumbnail, wordpress,
       admin, administration, api
-Requires at least: 3.0
-Tested up to: 3.6
-Stable tag: 2.4
+Requires at least: 3.9-alpha
+Tested up to: 3.9-alpha
+Stable tag: 2.5a
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
