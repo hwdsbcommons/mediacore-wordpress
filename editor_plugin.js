@@ -140,7 +140,7 @@
         longname : 'MediaCore Chooser',
         author : 'MediaCore <info@mediacore.com>',
         authorurl: 'http://mediacore.com',
-        version : '2.4'
+        version : '2.5a'
       };
     },
 
