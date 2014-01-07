@@ -29,8 +29,7 @@
   function loadScript(url) {
     var script = document.createElement('script');
     script.src = url;
-    (document.body || document.head ||
-     document.documentElement).appendChild(script);
+    (document.body || document.head || document.documentElement).appendChild(script);
   }
 
   tinymce.create('tinymce.plugins.MediaCoreChooserPlugin', {
@@ -50,17 +49,19 @@
       t.imageStr = '<img class="mcore-chooser-image" alt="%alt%" src="%src%" data-public-url="%public_url%" />';
       t.imageRegex = /<img class="mcore-chooser-image"[^>]*>/gi;
       t.shortcodes = [];
+      t.DOM = tinyMCE.DOM;
 
-      ed.onMouseDown.add(function(ed, e) {
+      t.editor.on('mousedown', function(e) {
+        var target = e.target;
         t._hideButtons();
-        if (!ed.plugins.wordpress) {
+        if (!t.editor.plugins.wordpress) {
           return;
         }
-        if (e.target.nodeName == 'IMG') {
-          if (ed.dom.hasClass(e.target, t.btnClass)) {
-            ed.plugins.wordpress._showButtons(e.target, 'mcore-image-buttons');
+        if (target.nodeName == 'IMG') {
+          if (t.DOM.hasClass(target, t.btnClass)) {
+            t.editor.plugins.wordpress._showButtons(target, 'mcore-image-buttons');
           } else {
-            ed.plugins.wordpress._showButtons(e.target, 'wp_editbtns');
+            t.editor.plugins.wordpress._showButtons(target, 'wp_editbtns');
           }
         }
       });
@@ -71,15 +72,15 @@
        */
       t._createButtons();
 
-      loadScript(ed.getParam('mcore_chooser_js_url'));
+      loadScript(t.editor.getParam('mcore_chooser_js_url'));
       var params = {
-        'mcore_host': ed.getParam('host'),
-        'mcore_scheme': ed.getParam('scheme', 'http')
+        'mcore_host': t.editor.getParam('host'),
+        'mcore_scheme': t.editor.getParam('scheme', 'http')
       };
 
-      ed.addCommand('mceMediaCoreChooser', function() {
+      t.editor.addCommand('mceMediaCoreChooser', function() {
         if (!window.mediacore) {
-          ed.windowManager.alert('Error loading the MediaCore plugin');
+          t.editor.windowManager.alert('Error loading the MediaCore plugin');
           return;
         }
         if (!t.chooser) {
@@ -98,34 +99,34 @@
         t.chooser.open();
       });
 
-      ed.addButton('mediacore', {
+      t.editor.addButton('mediacore', {
         title : 'MediaCore Chooser',
         image : t.url + '/images/mcore-tinymce-icon.png',
         cmd : 'mceMediaCoreChooser'
       });
 
-      ed.onChange.add(function(ed, o) {
+      t.editor.on('BeforeSetContent', function(e) {
         t._hideButtons();
-        if (!t.shortcodeRegex.test(o.content)) {
-          return;
-        }
-        o.content = t._replaceShortcodes(tinyMCE.activeEditor.getContent());
-        ed.setContent(o.content);
-        ed.execCommand('mceRepaint');
-      });
-
-      ed.onBeforeSetContent.add(function(ed, o) {
-        t._hideButtons();
-        if (t.shortcodeRegex.test(o.content)){
-          o.content = t._replaceShortcodes(o.content);
+        if (t.shortcodeRegex.test(e.content)){
+          e.content = t._replaceShortcodes(e.content);
         }
         return;
       });
 
-      ed.onPostProcess.add(function(ed, o) {
+      t.editor.on('change', function(e) {
         t._hideButtons();
-        if (o.get) {
-          o.content = t._replaceImages(o.content);
+        if (!t.shortcodeRegex.test(e.content)) {
+          return;
+        }
+        e.content = t._replaceShortcodes(e.content);
+        t.editor.setContent(e.content);
+        t.editor.execCommand('mceRepaint');
+      });
+
+      t.editor.on('PostProcess', function(e) {
+        t._hideButtons();
+        if (e.get) {
+          e.content = t._replaceImages(e.content);
         }
       });
     },
@@ -204,25 +205,20 @@
      * Create the image hover edit/delete buttons
      */
     _createButtons: function() {
-      var t = this,
-          DOM = tinyMCE.DOM,
-          ed = tinyMCE.activeEditor,
-          editBtn,
-          deleteBtn;
-
-      DOM.remove('mcore-image-buttons');
-      DOM.add(document.body, 'div', {
+      var t = this;
+      t.DOM.remove('mcore-image-buttons');
+      t.DOM.add(document.body, 'div', {
         id: 'mcore-image-buttons',
         style: 'display:none'
       });
-      editBtn = DOM.add('mcore-image-buttons', 'img', {
+      var editBtn = t.DOM.add('mcore-image-buttons', 'img', {
         src: t.url + '/images/edit-btn.png',
         id: 'mcore-edit-button',
         width: '24',
         height: '24',
         style: ''
       });
-      deleteBtn = DOM.add('mcore-image-buttons', 'img', {
+      var deleteBtn = t.DOM.add('mcore-image-buttons', 'img', {
         src: t.url + '/images/delete-btn.png',
         id: 'mcore-delete-button',
         width: '24',
@@ -230,23 +226,17 @@
         style: ''
       });
 
-      tinyMCE.dom.Event.add(editBtn, 'mousedown', function(e) {
+      t.DOM.bind(editBtn, 'mousedown', function(e) {
         t._hideButtons();
-        var ed = tinyMCE.activeEditor,
-            el = ed.selection.getNode();
-        ed.execCommand('mceMediaCoreChooser');
+        t.editor.execCommand('mceMediaCoreChooser');
         return false;
       });
-      tinyMCE.dom.Event.add(deleteBtn, 'mousedown', function(e) {
-        var ed = tinyMCE.activeEditor,
-            el = ed.selection.getNode(),
-            parent;
-        if (el.nodeName == 'IMG' && ed.dom.hasClass(el, t.btnClass)) {
+      t.DOM.bind(deleteBtn, 'mousedown', function(e) {
+        var el = t.editor.selection.getNode();
+        if (el.nodeName == 'IMG' && t.DOM.hasClass(el, t.btnClass)) {
           t._hideButtons();
-          parent = el.parentNode;
-          ed.dom.remove(el);
-          ed.execCommand('repaint');
-          //ed.selection.select(parent);
+          t.DOM.remove(el);
+          t.editor.execCommand('repaint');
           return false;
         }
       });
@@ -256,8 +246,8 @@
      * Hide the edit/delete buttons
      */
     _hideButtons: function() {
-      tinymce.DOM.hide('mcore-image-buttons');
-      tinymce.DOM.hide('wp_editbtns');
+      this.DOM.hide('mcore-image-buttons');
+      this.DOM.hide('wp_editbtns');
     }
   });
   tinymce.PluginManager.add('mediacore', tinymce.plugins.MediaCoreChooserPlugin);
