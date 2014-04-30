@@ -83,9 +83,12 @@ interactive experience. Supported documents include: PDFs, Microsoft Word
 * <a href="http://mediacore.com/blog/moocs-make-professors-dust-off-the-cobwebs" target="_blank">MOOCs Make Professors dust of the Cobwebs</a>
 
 == Installation ==
+
 * Visit our
  <a href="http://support.mediacore.com/customer/portal/articles/922513-installing-and-using-the-plugin-for-wordpress" target="_blank">WordPress support page</a>
  for instructions on how to install and use this plugin.
+
+* For manual installations, please ensure the plugin folder is renamed to "mediacore".
 
 == Changelog ==
 
