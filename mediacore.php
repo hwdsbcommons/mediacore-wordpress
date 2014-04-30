@@ -30,7 +30,7 @@ function mcore_chooser_button($buttons) {
 
 
 function mcore_chooser_js($plugin_array) {
-	$plugin_array['mediacore'] = plugins_url() . '/mediacore/editor_plugin.js';
+	$plugin_array['mediacore'] = plugins_url( 'editor_plugin.js' , __FILE__ );
 	return $plugin_array;
 }
 
@@ -82,7 +82,7 @@ add_filter('tiny_mce_before_init','mcore_chooser_tinymce_settings');
 
 
 function tinymce_styles() {
-	wp_enqueue_style('mcore-chooser-styles', plugins_url() . '/mediacore/styles/mcore_admin_tinymce.css');
+	wp_enqueue_style('mcore-chooser-styles', plugins_url( 'styles/mcore_admin_tinymce.css' , __FILE__ ));
 }
 add_action('admin_print_styles', 'tinymce_styles');
 
@@ -91,7 +91,7 @@ function mcore_options_page(){
 
 	$mcore_url = get_option('mcore_url');
 	$hidden_field_name = 'mcore_submit_hidden';
-	$mcore_settings_style_url =  plugins_url() . '/mediacore/styles/mcore_chooser_settings.css';
+	$mcore_settings_style_url =  plugins_url( 'styles/mcore_chooser_settings.css' , __FILE__ );
 	wp_enqueue_style('mcore_chooser_settings_style', $mcore_settings_style_url);
 
 ?>
