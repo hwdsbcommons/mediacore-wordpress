@@ -88,8 +88,6 @@ interactive experience. Supported documents include: PDFs, Microsoft Word
  <a href="http://support.mediacore.com/customer/portal/articles/922513-installing-and-using-the-plugin-for-wordpress" target="_blank">WordPress support page</a>
  for instructions on how to install and use this plugin.
 
-* For manual installations, please ensure the plugin folder is renamed to "mediacore".
-
 == Changelog ==
 
 = 2.4 =
