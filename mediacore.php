@@ -29,6 +29,13 @@ function mcore_chooser_button($buttons) {
 }
 
 
+function mcore_tinymce_styles() {
+	$file_path = plugins_url('/styles/mcore_admin_tinymce.css' , __FILE__);
+    add_editor_style($file_path);
+}
+add_action('after_setup_theme', 'mcore_tinymce_styles');
+
+
 function mcore_chooser_js($plugin_array) {
 	$plugin_array['mediacore'] = plugins_url( 'editor_plugin.js' , __FILE__ );
 	return $plugin_array;
@@ -79,12 +86,6 @@ function mcore_chooser_tinymce_settings($settings) {
 	return $settings;
 }
 add_filter('tiny_mce_before_init','mcore_chooser_tinymce_settings');
-
-
-function tinymce_styles() {
-	wp_enqueue_style('mcore-chooser-styles', plugins_url( 'styles/mcore_admin_tinymce.css' , __FILE__ ));
-}
-add_action('admin_print_styles', 'tinymce_styles');
 
 
 function mcore_options_page(){
