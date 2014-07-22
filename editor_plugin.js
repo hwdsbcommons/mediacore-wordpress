@@ -21,58 +21,35 @@
 
 (function() {
 
-  /**
-   * Append a new script url to the bottom of the
-   * document
-   * @param {string} url
-   */
-  function loadScript(url) {
-    var script = document.createElement('script');
-    script.src = url;
-    (document.body || document.head || document.documentElement).appendChild(script);
-  }
-
   tinymce.create('tinymce.plugins.MediaCoreChooserPlugin', {
 
     /**
-     * Chooser Init
-     * @param {object} ed
-     * @param {string} pluginUrl
+     * Initialize the plugin
+     *
+     * @param {tinymce.Editor} ed Editor instance that the plugin is initialized in.
+     * @param {string} url Absolute URL to where the plugin is located.
      */
     init : function(ed, pluginUrl) {
+
       var t = this;
       t.editor = ed;
       t.url = pluginUrl;
+
       t.btnClass = 'mcore-chooser-image';
       t.shortcodeStr = '[mediacore height="315px" public_url="%public_url%" thumb_url="%thumb_url%" title="%title%" width="560px"]';
       t.shortcodeRegex = /\[mediacore height="[^"]*" public_url="[^"]*" thumb_url="[^"]*" title="[^"]*" width="[^"]*"\]/gi;
-      t.imageStr = '<img class="mcore-chooser-image" alt="%alt%" src="%src%" data-public-url="%public_url%" />';
+      t.imageStr = '<img class="mcore-chooser-image" alt="%alt%" src="%src%" data-public-url="%public_url%" data-mce-placeholder="1" />';
       t.imageRegex = /<img class="mcore-chooser-image"[^>]*>/gi;
       t.shortcodes = [];
       t.DOM = tinyMCE.DOM;
 
-      t.editor.on('mousedown', function(e) {
-        var target = e.target;
-        t._hideButtons();
-        if (!t.editor.plugins.wordpress) {
-          return;
-        }
-        if (target.nodeName == 'IMG') {
-          if (t.DOM.hasClass(target, t.btnClass)) {
-            t.editor.plugins.wordpress._showButtons(target, 'mcore-image-buttons');
-          } else {
-            t.editor.plugins.wordpress._showButtons(target, 'wp_editbtns');
-          }
-        }
-      });
+      // Load custom dom css
+      content_css : t.url + '/styles/mcore_admin_tinymce.css';
 
       /**
-       * Creates custom image edit buttons that override
-       * the default wordpress edit behaviour
+       * Init the MediaCore Chooser
        */
-      t._createButtons();
-
-      loadScript(t.editor.getParam('mcore_chooser_js_url'));
+      this._loadScript(t.editor.getParam('mcore_chooser_js_url'));
       var params = {
         'mcore_host': t.editor.getParam('host'),
         'mcore_scheme': t.editor.getParam('scheme', 'http')
@@ -99,22 +76,43 @@
         t.chooser.open();
       });
 
+
+      /**
+       * Add the MediaCore button to TinyMCE
+       */
       t.editor.addButton('mediacore', {
         title : 'MediaCore Chooser',
         image : t.url + '/images/mcore-tinymce-icon.png',
         cmd : 'mceMediaCoreChooser'
       });
 
-      t.editor.on('BeforeSetContent', function(e) {
-        t._hideButtons();
-        if (t.shortcodeRegex.test(e.content)){
-          e.content = t._replaceShortcodes(e.content);
-        }
-        return;
+      /**
+       * Creates custom image edit buttons that replace
+       * the default wpimageedit image toolbar behaviour
+       */
+      t.editor.on('LoadContent', function(e) {
+        var editor = e.target;
+        t._createImageToolbar(editor);
       });
 
+      /**
+       * Editor mousedown event listener/handler
+       */
+      t.editor.on('mousedown', function(e) {
+        var target = e.target;
+        t._hideImageToolbar();
+        if (target.nodeName == 'IMG') {
+          if (t.DOM.hasClass(target, t.btnClass)) {
+            t._showImageToolbar(target);
+          }
+        }
+      });
+
+      /**
+       * Editor change event listener/handler
+       */
       t.editor.on('change', function(e) {
-        t._hideButtons();
+        t._hideImageToolbar();
         if (!t.shortcodeRegex.test(e.content)) {
           return;
         }
@@ -123,29 +121,57 @@
         t.editor.execCommand('mceRepaint');
       });
 
+
+      /**
+       * Editor BeforeSetContent event listener/handler
+       */
+      t.editor.on('BeforeSetContent', function(e) {
+        t._hideImageToolbar();
+        if (t.shortcodeRegex.test(e.content)){
+          e.content = t._replaceShortcodes(e.content);
+        }
+        return;
+      });
+
+
+      /**
+       * Editor postprocess event listener/handler
+       */
       t.editor.on('PostProcess', function(e) {
-        t._hideButtons();
+        t._hideImageToolbar();
         if (e.get) {
           e.content = t._replaceImages(e.content);
         }
       });
     },
 
+
+    /**
+     * Append a new script tag to the document body
+     * @param {string} url
+     */
+    _loadScript: function(url) {
+      var script = document.createElement('script');
+      script.src = url;
+      (document.body || document.head || document.documentElement).appendChild(script);
+    },
+
     /**
      * MediaCore Chooser Info
      * @return {object}
      */
-    getInfo : function() {
+    getInfo: function() {
       return {
-        longname : 'MediaCore Chooser',
         author : 'MediaCore <info@mediacore.com>',
         authorurl: 'http://mediacore.com',
+        longname : 'MediaCore Chooser',
         version : '2.5a'
       };
     },
 
+
     /**
-     * Replace shortcodes with image html
+     * Replace embed shortcodes with the IMG html
      * @param {string} content
      * @return {string}
      */
@@ -165,10 +191,9 @@
       return content;
     },
 
+
     /**
-     * Get the value from a string with attributes,
-     *  typically an html string, but it can be used
-     *  for any string that follows the same pattern
+     * Get an attribute value from an HTML string
      * @param {string} attr
      * @param {string} str
      * @return {string}
@@ -182,8 +207,9 @@
       return result[1];
     },
 
+
     /**
-     * Replace image html with shortcodes
+     * Replace image html with embed shortcodes
      * @param {string} content
      * @return {string}
      */
@@ -201,54 +227,87 @@
       return content;
     },
 
-    /**
-     * Create the image hover edit/delete buttons
-     */
-    _createButtons: function() {
-      var t = this;
-      t.DOM.remove('mcore-image-buttons');
-      t.DOM.add(document.body, 'div', {
-        id: 'mcore-image-buttons',
-        style: 'display:none'
-      });
-      var editBtn = t.DOM.add('mcore-image-buttons', 'img', {
-        src: t.url + '/images/edit-btn.png',
-        id: 'mcore-edit-button',
-        width: '24',
-        height: '24',
-        style: ''
-      });
-      var deleteBtn = t.DOM.add('mcore-image-buttons', 'img', {
-        src: t.url + '/images/delete-btn.png',
-        id: 'mcore-delete-button',
-        width: '24',
-        height: '24',
-        style: ''
-      });
 
-      t.DOM.bind(editBtn, 'mousedown', function(e) {
-        t._hideButtons();
-        t.editor.execCommand('mceMediaCoreChooser');
-        return false;
-      });
-      t.DOM.bind(deleteBtn, 'mousedown', function(e) {
-        var el = t.editor.selection.getNode();
-        if (el.nodeName == 'IMG' && t.DOM.hasClass(el, t.btnClass)) {
-          t._hideButtons();
-          t.DOM.remove(el);
-          t.editor.execCommand('repaint');
-          return false;
-        }
-      });
+    /**
+     * Create a custom edit image toolbar with a delete
+     * and edit button.
+     * @param {tinymce.Editor} ed Editor instance that the plugin is initialized in.
+     */
+    _createImageToolbar: function(editor) {
+      var t = this;
+      var dom = tinymce.DOM;
+
+      var toolbarElem = dom.get('mcore-image-buttons');
+      if (!toolbarElem) {
+        toolbarElem = dom.create('p', {
+            'id': 'mcore-image-buttons'
+        });
+        dom.setAttribs(toolbarElem, {
+          'data-mce-bogus': '1',
+          'contenteditable': 'false'
+        });
+        var editBtnElem = dom.create('i', {
+            'id': 'mcore-edit-button',
+            'class': 'dashicons dashicons-edit edit'
+        });
+        dom.setAttribs(editBtnElem, {
+          'data-mce-bogus': '1'
+        });
+        var delBtnElem = dom.create('i', {
+            'id': 'mcore-delete-button',
+            'class': 'dashicons dashicons-no-alt remove'
+        });
+        dom.setAttribs(delBtnElem, {
+          'data-mce-bogus': '1'
+        });
+
+        dom.add(toolbarElem, editBtnElem);
+        dom.add(toolbarElem, delBtnElem);
+        dom.add(editor.getBody(), toolbarElem);
+        t.toolbarElem = toolbarElem;
+
+        // Edit button mousedown listener/handler
+        dom.bind(editBtnElem, 'mousedown', function(e) {
+          t._hideImageToolbar();
+          t.editor.execCommand('mceMediaCoreChooser');
+          return;
+        });
+
+        // Delete button mousedown listener/handler
+        dom.bind(delBtnElem, 'mousedown', function(e) {
+          var el = t.editor.selection.getNode();
+          if (el.nodeName == 'IMG' && t.DOM.hasClass(el, t.btnClass)) {
+            t._hideImageToolbar();
+            t.DOM.remove(el);
+            t.editor.execCommand('repaint');
+            return;
+          }
+        });
+      }
     },
+
+
+    /**
+     * Show the edit/delete buttons
+     */
+    _showImageToolbar: function(target) {
+      if (this.toolbarElem) {
+        this.toolbarElem.style.top = target.offsetTop + 'px';
+        this.toolbarElem.style.left = target.offsetLeft + 'px';
+        this.toolbarElem.style.display = 'block';
+      }
+    },
+
 
     /**
      * Hide the edit/delete buttons
      */
-    _hideButtons: function() {
-      this.DOM.hide('mcore-image-buttons');
-      this.DOM.hide('wp_editbtns');
+    _hideImageToolbar: function() {
+      if (this.toolbarElem) {
+        this.toolbarElem.style.display = 'none';
+      }
     }
   });
+
   tinymce.PluginManager.add('mediacore', tinymce.plugins.MediaCoreChooserPlugin);
 })();
