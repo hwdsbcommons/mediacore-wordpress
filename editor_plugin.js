@@ -25,7 +25,6 @@
 
     /**
      * Initialize the plugin
-     *
      * @param {tinymce.Editor} ed Editor instance that the plugin is initialized in.
      * @param {string} url Absolute URL to where the plugin is located.
      */
@@ -41,20 +40,16 @@
       t.imageStr = '<img class="mcore-chooser-image" alt="%alt%" src="%src%" data-public-url="%public_url%" data-mce-placeholder="1" />';
       t.imageRegex = /<img class="mcore-chooser-image"[^>]*>/gi;
       t.shortcodes = [];
-      t.DOM = tinyMCE.DOM;
-
-      // Load custom dom css
-      content_css : t.url + '/styles/mcore_admin_tinymce.css';
+      t.DOM = tinymce.DOM;
 
       /**
        * Init the MediaCore Chooser
        */
-      this._loadScript(t.editor.getParam('mcore_chooser_js_url'));
+      t.loadScript(t.editor.getParam('mcore_chooser_js_url'));
       var params = {
         'mcore_host': t.editor.getParam('host'),
         'mcore_scheme': t.editor.getParam('scheme', 'http')
       };
-
       t.editor.addCommand('mceMediaCoreChooser', function() {
         if (!window.mediacore) {
           t.editor.windowManager.alert('Error loading the MediaCore plugin');
@@ -76,7 +71,6 @@
         t.chooser.open();
       });
 
-
       /**
        * Add the MediaCore button to TinyMCE
        */
@@ -92,7 +86,7 @@
        */
       t.editor.on('LoadContent', function(e) {
         var editor = e.target;
-        t._createImageToolbar(editor);
+        t.createImageToolbar(editor);
       });
 
       /**
@@ -100,10 +94,10 @@
        */
       t.editor.on('mousedown', function(e) {
         var target = e.target;
-        t._hideImageToolbar();
-        if (target.nodeName == 'IMG') {
+        t.hideImageToolbar();
+        if (target.nodeName.toUpperCase() == 'IMG') {
           if (t.DOM.hasClass(target, t.btnClass)) {
-            t._showImageToolbar(target);
+            t.showImageToolbar(target);
           }
         }
       });
@@ -112,78 +106,61 @@
        * Editor change event listener/handler
        */
       t.editor.on('change', function(e) {
-        t._hideImageToolbar();
+        t.hideImageToolbar();
         if (!t.shortcodeRegex.test(e.content)) {
           return;
         }
-        e.content = t._replaceShortcodes(e.content);
+        e.content = t.replaceShortcodes(e.content);
         t.editor.setContent(e.content);
         t.editor.execCommand('mceRepaint');
       });
-
 
       /**
        * Editor BeforeSetContent event listener/handler
        */
       t.editor.on('BeforeSetContent', function(e) {
-        t._hideImageToolbar();
+        t.hideImageToolbar();
         if (t.shortcodeRegex.test(e.content)){
-          e.content = t._replaceShortcodes(e.content);
+          e.content = t.replaceShortcodes(e.content);
         }
         return;
       });
-
 
       /**
        * Editor postprocess event listener/handler
        */
       t.editor.on('PostProcess', function(e) {
-        t._hideImageToolbar();
+        t.hideImageToolbar();
         if (e.get) {
-          e.content = t._replaceImages(e.content);
+          e.content = t.replaceImages(e.content);
         }
       });
     },
-
 
     /**
      * Append a new script tag to the document body
      * @param {string} url
      */
-    _loadScript: function(url) {
+    loadScript: function(url) {
       var script = document.createElement('script');
       script.src = url;
       (document.body || document.head || document.documentElement).appendChild(script);
     },
 
     /**
-     * MediaCore Chooser Info
-     * @return {object}
-     */
-    getInfo: function() {
-      return {
-        author : 'MediaCore <info@mediacore.com>',
-        authorurl: 'http://mediacore.com',
-        longname : 'MediaCore Chooser',
-        version : '2.5a'
-      };
-    },
-
-
-    /**
      * Replace embed shortcodes with the IMG html
      * @param {string} content
      * @return {string}
      */
-    _replaceShortcodes: function(content) {
+    replaceShortcodes: function(content) {
       this.shortcodes = content.match(this.shortcodeRegex);
       var el, imgHtml;
       for (var i = 0, code; code = this.shortcodes[i]; ++i) {
         imgHtml = this.imageStr.
             replace(/%alt%/, tinymce.DOM.encode(
-                  this._getAttrValueFromStr('title', code))).
-            replace(/%src%/, this._getAttrValueFromStr('thumb_url', code)).
-            replace(/%public_url%/, this._getAttrValueFromStr('public_url', code));
+                  this.getAttrValueFromStr('title', code))).
+            replace(/%src%/, this.getAttrValueFromStr('thumb_url', code)).
+            replace(/%public_url%/, this.getAttrValueFromStr('public_url', code));
         el = document.createElement('div');
         el.innerHTML = imgHtml;
         content = content.replace(code, imgHtml);
@@ -191,14 +168,13 @@
       return content;
     },
 
-
     /**
      * Get an attribute value from an HTML string
      * @param {string} attr
      * @param {string} str
      * @return {string}
      */
-    _getAttrValueFromStr: function(attr, str) {
+    getAttrValueFromStr: function(attr, str) {
       var re = new RegExp(attr + '="([^"]*)"', 'i');
       var result = re.exec(str);
       if (!result.length) {
@@ -207,33 +183,31 @@
       return result[1];
     },
 
-
     /**
      * Replace image html with embed shortcodes
      * @param {string} content
      * @return {string}
      */
-    _replaceImages: function(content) {
+    replaceImages: function(content) {
       var shortcode;
       this.imageRegex.lastIndex = 0;
       var images = content.match(this.imageRegex) || [];
       for (var i = 0, img; img = images[i]; ++i) {
         shortcode = this.shortcodeStr.
-            replace(/%public_url%/, this._getAttrValueFromStr('data-public-url', img)).
-            replace(/%thumb_url%/, this._getAttrValueFromStr('src', img)).
-            replace(/%title%/, this._getAttrValueFromStr('alt', img));
+            replace(/%public_url%/, this.getAttrValueFromStr('data-public-url', img)).
+            replace(/%thumb_url%/, this.getAttrValueFromStr('src', img)).
+            replace(/%title%/, this.getAttrValueFromStr('alt', img));
         content = content.replace(img, shortcode);
       }
       return content;
     },
-
 
     /**
      * Create a custom edit image toolbar with a delete
      * and edit button.
      * @param {tinymce.Editor} ed Editor instance that the plugin is initialized in.
      */
-    _createImageToolbar: function(editor) {
+    createImageToolbar: function(editor) {
       var t = this;
       var dom = tinymce.DOM;
 
@@ -268,7 +242,7 @@
 
         // Edit button mousedown listener/handler
         dom.bind(editBtnElem, 'mousedown', function(e) {
-          t._hideImageToolbar();
+          t.hideImageToolbar();
           t.editor.execCommand('mceMediaCoreChooser');
           return;
         });
@@ -277,7 +251,7 @@
         dom.bind(delBtnElem, 'mousedown', function(e) {
           var el = t.editor.selection.getNode();
           if (el.nodeName == 'IMG' && t.DOM.hasClass(el, t.btnClass)) {
-            t._hideImageToolbar();
+            t.hideImageToolbar();
             t.DOM.remove(el);
             t.editor.execCommand('repaint');
             return;
@@ -286,11 +260,11 @@
       }
     },
 
-
     /**
-     * Show the edit/delete buttons
+     * Show the image edit/del toolbar
+     * @param {Element}
      */
-    _showImageToolbar: function(target) {
+    showImageToolbar: function(target) {
       if (this.toolbarElem) {
         this.toolbarElem.style.top = target.offsetTop + 'px';
         this.toolbarElem.style.left = target.offsetLeft + 'px';
@@ -298,14 +272,26 @@
       }
     },
 
-
     /**
-     * Hide the edit/delete buttons
+     * Hide the image edit/del toolbar
      */
-    _hideImageToolbar: function() {
+    hideImageToolbar: function() {
       if (this.toolbarElem) {
         this.toolbarElem.style.display = 'none';
       }
+    },
+
+    /**
+     * get the MediaCore Chooser plugin info
+     * @return {object}
+     */
+    getInfo: function() {
+      return {
+        author : 'MediaCore <info@mediacore.com>',
+        authorurl: 'http://mediacore.com',
+        longname : 'MediaCore Chooser',
+        version : '2.5a'
+      };
     }
   });
 
