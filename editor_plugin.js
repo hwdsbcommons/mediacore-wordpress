@@ -205,6 +205,10 @@
     /**
      * Create a custom edit image toolbar with a delete
      * and edit button.
+     * This markup matches that used by the wpeditimage plugin and is reliant
+     * on wp-3.9 dashicons:
+     * {@link http://make.wordpress.org/core/2014/04/16/dashicons-in-wordpress-3-9/}
+     *
      * @param {tinymce.Editor} ed Editor instance that the plugin is initialized in.
      */
     createImageToolbar: function(editor) {
