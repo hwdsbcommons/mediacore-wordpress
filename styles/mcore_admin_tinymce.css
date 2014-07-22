@@ -18,7 +18,7 @@
 .mcore-chooser-img:hover {
 	cursor: pointer;
 }
-#mcore-image-buttons {
+#mcore-image-toolbar {
 	position: absolute;
 	display: none;
 	margin: 0;

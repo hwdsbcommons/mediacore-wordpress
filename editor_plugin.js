@@ -211,10 +211,10 @@
       var t = this;
       var dom = tinymce.DOM;
 
-      var toolbarElem = dom.get('mcore-image-buttons');
+      var toolbarElem = dom.get('mcore-image-toolbar');
       if (!toolbarElem) {
         toolbarElem = dom.create('p', {
-            'id': 'mcore-image-buttons'
+            'id': 'mcore-image-toolbar'
         });
         dom.setAttribs(toolbarElem, {
           'data-mce-bogus': '1',
