@@ -4,9 +4,9 @@ Tags: video, videos, audio, podcasting, progressive streaming, embed, mediacore,
       embedding, vimeo, youtube, thumbnails, images, widget, widgets, plugin,
       plugins, free, cms, collections, code, editor, thumbnail, wordpress,
       admin, administration, api
-Requires at least: 3.9-alpha
-Tested up to: 3.9-alpha
-Stable tag: 2.5a
+Requires at least: 3.8
+Tested up to: 3.9.1
+Stable tag: 2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,6 +89,9 @@ interactive experience. Supported documents include: PDFs, Microsoft Word
  for instructions on how to install and use this plugin.
 
 == Changelog ==
+
+= 2.6 =
+* Make plugin compatible with WP 3.9
 
 = 2.4 =
 * Fix user capabilities

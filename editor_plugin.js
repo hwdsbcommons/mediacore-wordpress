@@ -295,7 +295,7 @@
 				author : 'MediaCore <info@mediacore.com>',
 				authorurl: 'http://mediacore.com',
 				longname : 'MediaCore Chooser',
-				version : '2.5a'
+				version : '2.6'
 			};
 		}
 	});
