@@ -30,14 +30,14 @@ function mcore_chooser_button($buttons) {
 
 
 function mcore_tinymce_styles() {
-	$file_path = plugins_url('/styles/mcore_admin_tinymce.css' , __FILE__);
+	$file_path = plugins_url('styles/mcore_admin_tinymce.css' , __FILE__);
 	add_editor_style($file_path);
 }
 add_action('after_setup_theme', 'mcore_tinymce_styles');
 
 
 function mcore_chooser_js($plugin_array) {
-	$plugin_array['mediacore'] = plugins_url( 'editor_plugin.js' , __FILE__ );
+	$plugin_array['mediacore'] = plugins_url('editor_plugin.js' , __FILE__);
 	return $plugin_array;
 }
 
@@ -70,7 +70,6 @@ function mcore_chooser_init() {
 	}
 }
 add_action('init', 'mcore_chooser_init');
-//add_action('plugins_loaded', 'mcore_chooser_init');
 
 
 function mcore_chooser_tinymce_settings($settings) {
@@ -88,12 +87,10 @@ add_filter('tiny_mce_before_init','mcore_chooser_tinymce_settings');
 
 
 function mcore_options_page(){
-
 	$mcore_url = get_option('mcore_url');
 	$hidden_field_name = 'mcore_submit_hidden';
-	$mcore_settings_style_url =  plugins_url( 'styles/mcore_chooser_settings.css' , __FILE__ );
+	$mcore_settings_style_url =  plugins_url('styles/mcore_chooser_settings.css' , __FILE__);
 	wp_enqueue_style('mcore_chooser_settings_style', $mcore_settings_style_url);
-
 ?>
 	<div class="wrap">
 		<div class="icon32" id="mcore-logo"></div>
