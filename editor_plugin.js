@@ -47,8 +47,8 @@
        */
       t.loadScript(t.editor.getParam('mcore_chooser_js_url'));
       var params = {
-        'mcore_host': t.editor.getParam('host'),
-        'mcore_scheme': t.editor.getParam('scheme', 'http')
+        'host': t.editor.getParam('mcore_host'),
+        'scheme': t.editor.getParam('mcore_scheme', 'http')
       };
       t.editor.addCommand('mceMediaCoreChooser', function() {
         if (!window.mediacore) {
