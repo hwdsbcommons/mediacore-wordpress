@@ -169,7 +169,8 @@
     },
 
     /**
-     * Get an attribute value from an HTML string
+     * Get an attribute value from an HTML string or an embed shortcode
+     * style string
      * @param {string} attr
      * @param {string} str
      * @return {string}
