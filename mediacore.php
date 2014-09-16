@@ -22,6 +22,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+require_once('vendor/autoload.php');
+
 
 function mcore_chooser_button($buttons) {
 	array_push($buttons, 'separator', 'mediacore');
@@ -74,13 +76,9 @@ add_action('init', 'mcore_chooser_init');
 
 function mcore_chooser_tinymce_settings($settings) {
 	$url = get_option('mcore_url');
-	$url_parts = parse_url($url);
-	$scheme = (isset($url_parts['scheme'])) ? $url_parts['scheme'] : 'http';
-	$host = (isset($url_parts['host'])) ? $url_parts['host'] : 'demo.mediacore.tv';
-	$port = (isset($url_parts['port'])) ? ':' . $url_parts['port'] : '';
-	$base_url = "$scheme://$host$port";
-	$settings['mcore_url'] = $url . '/chooser';
-	$settings['mcore_chooser_js_url'] = "$base_url/api/chooser.js";
+	$client = new MediaCore\Http\Client($url);
+	$settings['mcore_url'] = $client->getUrl('chooser');
+	$settings['mcore_chooser_js_url'] = $client->getUrl('api', 'chooser.js');
 	return $settings;
 }
 add_filter('tiny_mce_before_init','mcore_chooser_tinymce_settings');
