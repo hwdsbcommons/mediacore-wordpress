@@ -26,6 +26,110 @@ require_once('vendor/autoload.php');
 
 
 /**
+ * Add custom TinyMCE styles
+ *
+ * @return void
+ */
+function mcore_tinymce_styles() {
+	$file_path = plugins_url('styles/mcore_admin_tinymce.css' , __FILE__);
+	add_editor_style($file_path);
+}
+add_action('after_setup_theme', 'mcore_tinymce_styles');
+
+
+/**
+ * Initialize the MediaCore TinyMCE Chooser
+ *
+ * @return void
+ */
+function mcore_chooser_init() {
+	if ((is_super_admin() || current_user_can('edit_posts') || current_user_can('edit_pages')) &&
+		get_user_option('rich_editing')) {
+		add_filter('mce_external_plugins', 'mcore_chooser_js');
+		add_filter('mce_buttons', 'mcore_chooser_button', 0);
+		add_filter('tiny_mce_before_init', 'mcore_chooser_tinymce_init');
+	}
+}
+add_action('init', 'mcore_chooser_init');
+
+
+/**
+ * Add the MediaCore plugin settings action to add
+ * the settings to the admin menu
+ *
+ * @return void
+ */
+function mcore_chooser_init_options(){
+	add_options_page('MediaCore Media Embed', 'MediaCore', 8, 'mediacore', 'mcore_options_page');
+}
+add_action('admin_menu', 'mcore_chooser_init_options');
+
+
+/**
+ * Increment the TinyMCE version number
+ *
+ * @param string $ver
+ * @return string
+ */
+function mcore_chooser_refresh_mce($ver) {
+	$ver += 1;
+	return $ver;
+}
+add_filter('tiny_mce_version', 'mcore_chooser_refresh_mce');
+
+
+/**
+ * Get the MediaCore params on TinyMCE init
+ *
+ * @param array $settings
+ * @return array
+ */
+function mcore_chooser_tinymce_settings($settings) {
+	$url = get_option('mcore_url');
+	$client = new MediaCore\Http\Client($url);
+	$settings['mcore_url'] = $client->getUrl('chooser');
+	$settings['mcore_chooser_js_url'] = $client->getUrl('api', 'chooser.js');
+	return $settings;
+}
+add_filter('tiny_mce_before_init','mcore_chooser_tinymce_settings');
+
+
+/**
+ * Implement the shortcode API; takes the shortcode attributes and turns them
+ * into the correct iframe embed code. i.e.:
+ * [mediacore
+ *      public_url="http://demo.mediacore.tv/media/bctia-demoday-2012"
+ *      thumb_url="http://demo.mediacore.tv/images/default/video-poster.png"
+ *      title="BCTIA demoday"
+ *      width="560px"
+ *      height="315px"
+ * ]
+ *
+ */
+function mcore_shortcode_handler($atts) {
+	extract(shortcode_atts(array(
+		'public_url' => '',
+		'thumb_url' => '',
+		'title' => '',
+		'width' => '',
+		'height' => '',
+	), $atts));
+
+	$embedcode = "<iframe src=\"" . $public_url . "/embed_player?iframe=True\"";
+	$embedcode .= " width=\"" . $width . "\"";
+	$embedcode .= " height=\"" . $height . "\"";
+	$embedcode .= " mozallowfullscreen=\"mozallowfullscreen\"";
+	$embedcode .= " webkitallowfullscreen=\"webkitallowfullscreen\"";
+	$embedcode .= " allowfullscreen=\"allowfullscreen\"";
+	$embedcode .= " scrolling=\"no\"";
+	$embedcode .= " frameborder=\"0\"";
+	$embedcode .= "></iframe>";
+	return $embedcode;
+}
+add_shortcode('mediacore', 'mcore_shortcode_handler');
+
+
+/**
  * Add MediaCore Chooser button at the end of the
  * buttons list
  *
@@ -36,18 +140,6 @@ function mcore_chooser_button($buttons) {
 	array_push($buttons, 'separator', 'mediacore');
 	return $buttons;
 }
-
-
-/**
- * Add custom TinyMCE styles
- *
- * @return void
- */
-function mcore_tinymce_styles() {
-	$file_path = plugins_url('styles/mcore_admin_tinymce.css' , __FILE__);
-	add_editor_style($file_path);
-}
-add_action('after_setup_theme', 'mcore_tinymce_styles');
 
 
 /**
@@ -79,51 +171,6 @@ function mcore_chooser_tinymce_init($options) {
 	}
 	return $options;
 }
-
-
-/**
- * Increment the TinyMCE version number
- *
- * @param string $ver
- * @return string
- */
-function mcore_chooser_refresh_mce($ver) {
-	$ver += 1;
-	return $ver;
-}
-add_filter('tiny_mce_version', 'mcore_chooser_refresh_mce');
-
-
-/**
- * Initialize the MediaCore TinyMCE Chooser
- *
- * @return void
- */
-function mcore_chooser_init() {
-	if ((is_super_admin() || current_user_can('edit_posts') || current_user_can('edit_pages')) &&
-		get_user_option('rich_editing')) {
-		add_filter('mce_external_plugins', 'mcore_chooser_js');
-		add_filter('mce_buttons', 'mcore_chooser_button', 0);
-		add_filter('tiny_mce_before_init', 'mcore_chooser_tinymce_init');
-	}
-}
-add_action('init', 'mcore_chooser_init');
-
-
-/**
- * Get the MediaCore params on TinyMCE init
- *
- * @param array $settings
- * @return array
- */
-function mcore_chooser_tinymce_settings($settings) {
-	$url = get_option('mcore_url');
-	$client = new MediaCore\Http\Client($url);
-	$settings['mcore_url'] = $client->getUrl('chooser');
-	$settings['mcore_chooser_js_url'] = $client->getUrl('api', 'chooser.js');
-	return $settings;
-}
-add_filter('tiny_mce_before_init','mcore_chooser_tinymce_settings');
 
 
 /**
@@ -186,50 +233,4 @@ function mcore_options_page(){
 	</div>
 <?php
 }
-
-/**
- * Add the MediaCore plugin settings action to add
- * the settings to the admin menu
- *
- * @return void
- */
-function mcore_chooser_init_options(){
-	add_options_page('MediaCore Media Embed', 'MediaCore', 8, 'mediacore', 'mcore_options_page');
-}
-add_action('admin_menu', 'mcore_chooser_init_options');
-
-
-/**
- * Implement the shortcode API; takes the shortcode attributes and turns them
- * into the correct iframe embed code. i.e.:
- * [mediacore
- *      public_url="http://demo.mediacore.tv/media/bctia-demoday-2012"
- *      thumb_url="http://demo.mediacore.tv/images/default/video-poster.png"
- *      title="BCTIA demoday"
- *      width="560px"
- *      height="315px"
- * ]
- *
- */
-function mcore_shortcode_handler($atts) {
-	extract(shortcode_atts(array(
-		'public_url' => '',
-		'thumb_url' => '',
-		'title' => '',
-		'width' => '',
-		'height' => '',
-	), $atts));
-
-	$embedcode = "<iframe src=\"" . $public_url . "/embed_player?iframe=True\"";
-	$embedcode .= " width=\"" . $width . "\"";
-	$embedcode .= " height=\"" . $height . "\"";
-	$embedcode .= " mozallowfullscreen=\"mozallowfullscreen\"";
-	$embedcode .= " webkitallowfullscreen=\"webkitallowfullscreen\"";
-	$embedcode .= " allowfullscreen=\"allowfullscreen\"";
-	$embedcode .= " scrolling=\"no\"";
-	$embedcode .= " frameborder=\"0\"";
-	$embedcode .= "></iframe>";
-	return $embedcode;
-}
-add_shortcode('mediacore', 'mcore_shortcode_handler');
 ?>
