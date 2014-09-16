@@ -156,13 +156,13 @@ function mcore_chooser_js($plugin_array) {
 
 /**
  * Initialize the TinyMCE iframe ruleset
+ * Without this, the allowfullscreen attributes will be stripped by TinyMCE,
+ * breaking HTML5 fullscreen in our player.
  *
  * @param array $options
  * @return array
  */
 function mcore_chooser_tinymce_init($options) {
-	// Without this, the allowfullscreen attributes will be stripped by TinyMCE,
-	// breaking HTML5 fullscreen in our player.
 	$iframeRule = 'iframe[src|width|height|frameborder|allowfullscreen|mozallowfullscreen|webkitallowfullscreen]';
 	if (isset($options['extended_valid_elements'])) {
 		$options['extended_valid_elements'] .= ',' . $iframeRule;
