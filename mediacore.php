@@ -86,7 +86,7 @@ add_filter('tiny_mce_version', 'mcore_chooser_refresh_mce');
  */
 function mcore_chooser_tinymce_settings($settings) {
 	$url = get_option('mcore_url');
-	$client = new MediaCore\Http\Client($url);
+	$client = new \MediaCore\Http\Client($url);
 	$settings['mcore_url'] = $client->getUrl('chooser');
 	$settings['mcore_chooser_js_url'] = $client->getUrl('api', 'chooser.js');
 	return $settings;
@@ -179,28 +179,26 @@ function mcore_chooser_tinymce_init($options) {
  * @return string
  */
 function mcore_options_page(){
-	$mcore_url = get_option('mcore_url');
+	$url = get_option('mcore_url');
 	$hidden_field_name = 'mcore_submit_hidden';
-	$mcore_settings_style_url =  plugins_url('styles/mcore_chooser_settings.css' , __FILE__);
-	wp_enqueue_style('mcore_chooser_settings_style', $mcore_settings_style_url);
+	$settings_style_url =  plugins_url('styles/mcore_chooser_settings.css' , __FILE__);
+	wp_enqueue_style('mcore_chooser_settings_style', $settings_style_url);
 ?>
 	<div class="wrap">
 		<div class="icon32" id="mcore-logo"></div>
 		<h2>MediaCore</h2>
 <?php
-		$mcore_url = get_option('mcore_url');
+		$url = get_option('mcore_url');
 		if (isset($_POST[$hidden_field_name], $_POST['mcore_url']) && $_POST[$hidden_field_name] == 'Y') {
-			$mcore_url = $_POST['mcore_url'];
-			$scheme = parse_url($mcore_url, PHP_URL_SCHEME);
-			$host = parse_url($mcore_url, PHP_URL_HOST);
-			$url_error = (empty($scheme) || empty($host));
-			if ($url_error) {
+			$url = $_POST['mcore_url'];
+			$uri = new \MediaCore\Uri($url);
+			if ($uri->isValid()) {
+				$message_class = 'updated fade';
+				$message_text = 'MediaCore URL updated to: ' . $url;
+				update_option('mcore_url', $url);
+			} else {
 				$message_class = 'error';
 				$message_text = 'Please verify that your url is correct.';
-			} else {
-				$message_class = 'updated fade';
-				$message_text = 'MediaCore URL updated to: ' . $mcore_url;
-				update_option('mcore_url', $mcore_url);
 			}
 ?>
 		<div id="message" class="<?php echo $message_class; ?>">
@@ -226,7 +224,7 @@ function mcore_options_page(){
 				<em><strong>*Note:</strong> If your wordpress site is being served over SSL (https://) then your MediaCore URL must also support SSL.</em>
 			</p>
 			<p>
-				<input type="text" name="mcore_url" class="mcore-url<?php if (!empty($url_error)): ?> error<?php endif; ?>" value="<?php echo $mcore_url ?>" />
+				<input type="text" name="mcore_url" class="mcore-url<?php if (!$uri->isValid()): ?> error<?php endif; ?>" value="<?php echo $url ?>" />
 			</p>
 			<?php submit_button(); ?>
 		</form>
