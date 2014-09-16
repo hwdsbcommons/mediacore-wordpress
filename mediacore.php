@@ -25,12 +25,24 @@
 require_once('vendor/autoload.php');
 
 
+/**
+ * Add MediaCore Chooser button at the end of the
+ * buttons list
+ *
+ * @param array $buttons
+ * @return array
+ */
 function mcore_chooser_button($buttons) {
 	array_push($buttons, 'separator', 'mediacore');
 	return $buttons;
 }
 
 
+/**
+ * Add custom TinyMCE styles
+ *
+ * @return void
+ */
 function mcore_tinymce_styles() {
 	$file_path = plugins_url('styles/mcore_admin_tinymce.css' , __FILE__);
 	add_editor_style($file_path);
@@ -38,12 +50,24 @@ function mcore_tinymce_styles() {
 add_action('after_setup_theme', 'mcore_tinymce_styles');
 
 
+/**
+ * Add the MediaCore Chooser plugin javascript
+ *
+ * @param array $plugin_array
+ * @return array
+ */
 function mcore_chooser_js($plugin_array) {
 	$plugin_array['mediacore'] = plugins_url('editor_plugin.js' , __FILE__);
 	return $plugin_array;
 }
 
 
+/**
+ * Initialize the TinyMCE iframe ruleset
+ *
+ * @param array $options
+ * @return array
+ */
 function mcore_chooser_tinymce_init($options) {
 	// Without this, the allowfullscreen attributes will be stripped by TinyMCE,
 	// breaking HTML5 fullscreen in our player.
@@ -56,6 +80,13 @@ function mcore_chooser_tinymce_init($options) {
 	return $options;
 }
 
+
+/**
+ * Increment the TinyMCE version number
+ *
+ * @param string $ver
+ * @return string
+ */
 function mcore_chooser_refresh_mce($ver) {
 	$ver += 1;
 	return $ver;
@@ -63,6 +94,11 @@ function mcore_chooser_refresh_mce($ver) {
 add_filter('tiny_mce_version', 'mcore_chooser_refresh_mce');
 
 
+/**
+ * Initialize the MediaCore TinyMCE Chooser
+ *
+ * @return void
+ */
 function mcore_chooser_init() {
 	if ((is_super_admin() || current_user_can('edit_posts') || current_user_can('edit_pages')) &&
 		get_user_option('rich_editing')) {
@@ -74,6 +110,12 @@ function mcore_chooser_init() {
 add_action('init', 'mcore_chooser_init');
 
 
+/**
+ * Get the MediaCore params on TinyMCE init
+ *
+ * @param array $settings
+ * @return array
+ */
 function mcore_chooser_tinymce_settings($settings) {
 	$url = get_option('mcore_url');
 	$client = new MediaCore\Http\Client($url);
@@ -84,6 +126,11 @@ function mcore_chooser_tinymce_settings($settings) {
 add_filter('tiny_mce_before_init','mcore_chooser_tinymce_settings');
 
 
+/**
+ * Setup the MediaCore plugin settings page
+ *
+ * @return string
+ */
 function mcore_options_page(){
 	$mcore_url = get_option('mcore_url');
 	$hidden_field_name = 'mcore_submit_hidden';
@@ -140,7 +187,12 @@ function mcore_options_page(){
 <?php
 }
 
-
+/**
+ * Add the MediaCore plugin settings action to add
+ * the settings to the admin menu
+ *
+ * @return void
+ */
 function mcore_chooser_init_options(){
 	add_options_page('MediaCore Media Embed', 'MediaCore', 8, 'mediacore', 'mcore_options_page');
 }
