@@ -87,11 +87,28 @@ add_filter('tiny_mce_version', 'mcore_chooser_refresh_mce');
 function mcore_chooser_tinymce_settings($settings) {
 	$url = get_option('mcore_url');
 	$client = new \MediaCore\Http\Client($url);
-	$settings['mcore_url'] = $client->getUrl('chooser');
 	$settings['mcore_chooser_js_url'] = $client->getUrl('api', 'chooser.js');
+	$query_str = $client->getQuery(array(
+		'custom_plugin_info'=>mcore_get_plugin_version()
+	));
+	$settings['mcore_url'] = $client->getUrl('chooser') . '?' . $query_str;
 	return $settings;
 }
 add_filter('tiny_mce_before_init','mcore_chooser_tinymce_settings');
+
+
+/**
+ * Get the plugin version
+ * @return string
+ */
+function mcore_get_plugin_version() {
+	$version = 'mediacore-wordpress-chooser-';
+	$plugin_data = get_plugin_data( __FILE__ );
+	if (array_key_exists('Version', $plugin_data)) {
+		$version .= $plugin_data['Version'];
+	}
+	return $version;
+}
 
 
 /**
