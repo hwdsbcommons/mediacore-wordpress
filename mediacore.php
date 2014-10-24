@@ -206,6 +206,8 @@ function mcore_options_page(){
 		<h2>MediaCore</h2>
 <?php
 		$url = get_option('mcore_url');
+		$uri = new \MediaCore\Uri($url);
+
 		if (isset($_POST[$hidden_field_name], $_POST['mcore_url']) && $_POST[$hidden_field_name] == 'Y') {
 			$url = $_POST['mcore_url'];
 			$uri = new \MediaCore\Uri($url);
