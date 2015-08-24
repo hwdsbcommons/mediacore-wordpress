@@ -103,6 +103,9 @@ add_filter('tiny_mce_before_init','mcore_chooser_tinymce_settings');
  */
 function mcore_get_plugin_version() {
 	$version = 'mediacore-wordpress-chooser-';
+	if ( false === function_exists( 'get_plugin_data' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/plugin.php';
+	}
 	$plugin_data = get_plugin_data( __FILE__ );
 	if (array_key_exists('Version', $plugin_data)) {
 		$version .= $plugin_data['Version'];
